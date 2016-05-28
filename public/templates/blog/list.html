@@ -1,0 +1,6 @@
+Search <input type="text" ng-model="search.title" />
+    <ul>
+        <li ng-repeat="blog in blogs | filter:search">
+            <a href="#/{/{blog._id}/}">{/{ blog.title }/}</a>
+        </li>
+    </ul>
