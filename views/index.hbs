@@ -1,2 +1,73 @@
+
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+
+<ng-view></ng-view>
+
+
+<!-- Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-resource.min.js"></script>
+    
+
+<script>
+    angular.module('todo', ['ngRoute', 'ngResource']);
+    
+    angular.module('app', ['todo'])
+    
+    .factory('Blogs', ['$resource', function($resource){
+        return $resource('/blogs/:id', null, {
+            'update': { method:'PUT' }
+        });
+    }])
+  
+    
+    .controller('BlogController', ['$scope', 'Blogs', function ($scope, Blogs) {
+        $scope.blogs = Blogs.query();
+        
+    }])
+    
+    .controller('BlogAddController', ['$scope', '$routeParams', 'Blogs', function($scope, $routeParams, Blogs) {
+       $scope.save = function() {
+         
+        if (!$scope.blog || $scope.blog.length < 1) {
+            return;
+        }
+         
+        var blog = new Blogs({ title: $scope.blog.title, body: $scope.blog.body });
+        //$scope.blogs = !$scope.blogs?$scope.blogs:[];
+        blog.$save(function(){
+            //$scope.blogs.push(blog);
+            $scope.blog = ''; // clear textbox
+        });
+         
+           
+       };
+        
+    }])
+     
+    .controller('BlogDetailController', ['$scope', '$routeParams', 'Blogs', function($scope, $routeParams, Blogs) {
+        $scope.blog = Blogs.get({id:$routeParams.id});
+        //console.log($scope.blog);
+    }])
+    
+    
+    .config(['$routeProvider', '$interpolateProvider', function($routeProvider, $interpolateProvider) {
+        
+        $interpolateProvider.startSymbol('{/{');
+        $interpolateProvider.endSymbol('}/}');
+
+        $routeProvider
+        .when(
+            '/', {templateUrl:'/templates/blog/list.html', controller:'BlogController'}
+        )
+        .when(
+            '/add', {templateUrl:'/templates/blog/add.html', controller:'BlogAddController'}
+        )
+        .when(
+            '/:id', {templateUrl:'/templates/blog/detail.html', controller:'BlogDetailController'}
+         );
+         
+        
+    }])
+</script>

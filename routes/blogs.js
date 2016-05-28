@@ -29,6 +29,7 @@ router.delete('/:id', function(req, res, next) {
 
 /* GET /todos/id */
 router.get('/:id', function(req, res, next) {
+  console.log(req.params);
   Todo.findById(req.params.id, function (err, post) {
     if (err) return next(err);
     res.json(post);
