@@ -1,4 +1,6 @@
-Search <input type="text" ng-model="search.title" />
+<div class="form-group">
+	Search <input class="form-control" type="text" ng-model="search.title" />
+</div>
     <ul>
         <li ng-repeat="blog in blogs | filter:search">
             <a href="#/{/{blog._id}/}">{/{ blog.title }/}</a>
