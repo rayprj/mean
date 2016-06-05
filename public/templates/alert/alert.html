@@ -1,0 +1,4 @@
+<div class='alert-{{alertData.type}}' ng-show="alertData.message" ng-class="{'alert fade in':alertData.message}">
+<!--<a class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
+<div ng-bind-html="getAlertMessage()"></div>
+</div>

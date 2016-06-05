@@ -1,6 +1,5 @@
-angular.module('todo', ['ngRoute', 'ngResource']);
-    
-angular.module('app', ['todo'])
+
+angular.module('blog', ['base'])
 
 .factory('Blogs', ['$resource', function($resource){
     return $resource('/blogs/:id', null, {
@@ -11,17 +10,17 @@ angular.module('app', ['todo'])
 
 
 .controller('BlogController', ['$scope', 'Blogs', function ($scope, Blogs) {
+    $scope.init();
     $scope.blogs = Blogs.query();
     
 }])
 
-.controller('HeaderController', function($scope, $location) {
-    $scope.isActive = function(page) {
-        return $location.path()==page;
-    } 
-})
+
 
 .controller('BlogAddEditController', ['$scope', '$routeParams', '$location', 'Blogs', function($scope, $routeParams, $location, Blogs) {
+    
+    $scope.init();
+    
     $scope.html = {label:'Add Blog', button:'Create'};
     
     if ('id' in $routeParams) {
@@ -55,28 +54,9 @@ angular.module('app', ['todo'])
 }])
     
 .controller('BlogDetailController', ['$scope', '$routeParams', 'Blogs', function($scope, $routeParams, Blogs) {
+    $scope.init();
     $scope.blog = Blogs.get({id:$routeParams.id});
     //console.log($scope.blog);
 }])
 
 
-.config(['$routeProvider', '$interpolateProvider', function($routeProvider, $interpolateProvider) {
-    
-    $interpolateProvider.startSymbol('{/{');
-    $interpolateProvider.endSymbol('}/}');
-
-    $routeProvider
-    .when(
-        '/', {templateUrl:'/templates/blog/list.html', controller:'BlogController'}
-    )
-    .when(
-        '/add', {templateUrl:'/templates/blog/add.html', controller:'BlogAddEditController'}
-    )
-    .when(
-        '/:id', {templateUrl:'/templates/blog/detail.html', controller:'BlogDetailController'}
-        )
-        .when(
-        '/:id/edit', {templateUrl:'/templates/blog/add.html', controller:'BlogAddEditController'}
-        );
-    
-}])

@@ -1,0 +1,48 @@
+<div ng-show="!registrationSuccess">
+<h1>User Registration</h1> 
+
+
+
+<form name="myForm" class="form-horizontal">
+<div class="control-group" ng-class="{'has-error':myForm.username.$invalid && myForm.username.$dirty}">
+    <label for="username" class="control-label">Username</label>
+    <div class="controls">
+        <input class="input-medium" placeholder="" ng-minlength="4" ng-pattern="validusername" id="username" name="username" ng-model="user.username" required />
+        <p class="help-block">Username can contain any letters or numbers, without spaces. Should be at least 4 Chars</p>
+    </div>
+</div>
+
+<div class="control-group" ng-class="{'has-error':myForm.email.$invalid && myForm.email.$dirty}">
+    <label for="email" class="control-label">Email</label>
+    <div class="controls">
+        <input class="input-medium" placeholder="xyz@abc.com" type="email" id="email" name="email" ng-model="user.email" required />
+        <p class="help-block">Please provide your email ID</p>
+    </div>
+</div>
+
+<div class="control-group" ng-class="{'has-error':myForm.password.$invalid && myForm.password.$dirty}">
+    <label for="userpassword" class="control-label">Password</label>
+    <div class="controls">
+        <input type="password" class="input-medium" ng-minlength="4" id="password" name="password" ng-model="user.password"  required />
+        <span ng-class="{'glyphicon glyphicon-remove form-control-feedback':myForm.password.$invalid}"></span>
+        <!--<span ng-show="myForm.password.$error.minlength">Too short!</span>-->
+        <p class="help-block">Password should be at least 4 characters</p>
+    </div>
+</div>
+
+<div class="control-group" ng-class="{'has-error':myForm.userpassword_confirm.$invalid && myForm.userpassword_confirm.$dirty}">
+    <label for="userpassword_confirm" class="control-label">Confirm Password</label>
+    <div class="controls">
+        <input type="password" class="input-medium" id="userpassword_confirm" name="userpassword_confirm" ng-model="user.userpassword_confirm" required pwmatch="user.password" />
+        <p class="help-block">Please confirm the password</p>
+    </div>
+</div>
+
+<div class="control-group">
+    <!-- Button -->
+    <div class="controls">
+    <button ng-click="register()" class="btn btn-success">Register</button>
+    </div>
+</div>
+</form>
+</div>
