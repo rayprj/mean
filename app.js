@@ -35,6 +35,7 @@ mongoose.connect('mongodb://localhost/blog', function(err) {
 
 app.use('/', routes);
 app.use('/blogs', blogs);
+app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -51,10 +52,17 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
+    
+    if (err.status == 400) {
+      res.render('error', {
+        message: err.message,
+        error: err
+      });
+      return;
+    }
+    
+    res.json({status:'error', message:err.message, stack:err.stack});
+    
   });
 }
 
@@ -62,10 +70,16 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+  if (err.status == 400) {
+      res.render('error', {
+        message: err.message,
+        error: {}
+      });
+      return;
+  }
+  
+  res.json({status:'error', message:err.message});
+  
 });
 
 
