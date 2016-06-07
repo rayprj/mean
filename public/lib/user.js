@@ -39,6 +39,10 @@ angular.module('user', ['base'])
     
     //$scope.myForm.$inValid = false;
     
+    $scope.login = function() {
+        
+    }
+    
     $scope.register = function() {
         
         if ($scope.myForm.$inValid) {
