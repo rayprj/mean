@@ -4,6 +4,8 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var user = require('../models/user.js');
 
+var passport = require('passport');
+
 var jwt = require('express-jwt');
 var auth = jwt({
   secret: 'MY_SECRET',
@@ -34,15 +36,16 @@ router.post('/', function(req, res, next) {
   
   var u = new user();
 
-  u.name = req.body.username;
+  u.username = req.body.username;
   u.email = req.body.email;
 
   u.setPassword(req.body.password);
 
   u.save(function(err, post) {
-    var token;
-    token = user.generateJwt();
-    res.status(200);
+    if (err) {
+      return next(err);
+    }
+    var token = u.generateJwt();    
     res.json({
       "token" : token
     });
@@ -50,7 +53,7 @@ router.post('/', function(req, res, next) {
   
 });
 
-router.get('/login', function(req, res, next) {
+router.post('/login', function(req, res, next) {
   
   passport.authenticate('local', function(err, user, info){
     var token;

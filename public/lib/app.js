@@ -24,7 +24,13 @@ angular.module('app', ['base','blog', 'user'])
     .when(
     '/user/login', {templateUrl:'/templates/user/login.html', controller:'UserController'}
     )
-    
+    .when(
+    '/user/profile', {templateUrl:'/templates/user/profile.html', controller:'UserProfileController'}
+    )
+    .otherwise({redirectTo: '/'});
+
 }])
+
+
 
 

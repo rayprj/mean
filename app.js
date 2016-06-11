@@ -10,7 +10,7 @@ var users = require('./routes/users');
 var blogs = require('./routes/blogs');
 
 var passport = require('passport');
-require('./app_api/config/passport');
+require('./config/passport');
 
 var app = express();
 
