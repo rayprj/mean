@@ -1,4 +1,4 @@
-angular.module('base', ['ngRoute', 'ngResource'])
+angular.module('base', ['ngRoute', 'ngResource', 'ui.router'])
 
 .directive('alertDirective', function() {
     return {
@@ -12,6 +12,11 @@ angular.module('base', ['ngRoute', 'ngResource'])
     $scope.isActive = function(page) {
         return $location.path()==page;
     } 
+
+    $scope.isLoggedIn = function() {
+        return $scope.loggedIn;
+    }
+
 })
 
 .controller('baseController', ['$scope', '$sce', function($scope, $sce) {

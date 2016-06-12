@@ -52,13 +52,7 @@ angular.module('user', ['base'])
     
     
     login = function(user) {
-        return $http.post('/users/login', user).success(function(data) {
-            saveToken(data.token);
-            
-        }).error(function(err) {
-            $scope.showAlert({message:err.message, type:'warning'});
-            //console.log(err);  
-        });
+        return $http.post('/users/login', user);
     };
     
     return {
@@ -94,18 +88,36 @@ angular.module('user', ['base'])
     }
 })
 
-.controller('UserController', ['$scope', 'User', '$http', '$rootScope', 'authentication', function($scope, User, $http, $rootScope, authentication){
+.controller('UserController', ['$scope', 'User', '$http', '$rootScope', 'authentication', '$location', function($scope, User, $http, $rootScope, authentication, $location){
     
     $scope.init();
     
     $scope.registrationSuccess = false;
     
     $scope.validusername = /^[a-zA-Z0-9]*$/;
+
+    $scope.removeAlert();
+    
+    $rootScope.loggedIn = authentication.isLoggedIn();
     
     //$scope.myForm.$inValid = false;
-    
+    $rootScope.logout = function() {
+        authentication.logout();
+        $rootScope.loggedIn = authentication.isLoggedIn();
+        $location.path('/user/login');
+        $scope.showAlert({message:'Logout successfully!', type:'success'});
+        
+    }
+
     $scope.login = function() {
-        authentication.login($scope.user);
+        authentication.login($scope.user).success(function(data) {
+            authentication.saveToken(data.token);
+            $rootScope.loggedIn = authentication.isLoggedIn();
+            $location.path('/user/profile');
+        }).error(function(err) {
+            $scope.showAlert({message:err.message, type:'warning'});
+            //console.log(err);  
+        });
     }
     
     $scope.register = function() {
@@ -166,13 +178,5 @@ angular.module('user', ['base'])
 }])
 
 
-.run(['$rootScope', '$location', 'authentication', function($rootScope, $location, authentication) {
-    $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) {
-        //console.log($location.path())
-      if ($location.path() === '/user/profile' && !authentication.isLoggedIn()) {
-          console.log('changing path');
-          $location.path('/');
-      }
-    });
-}])
+
 
